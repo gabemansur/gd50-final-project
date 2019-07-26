@@ -9,7 +9,7 @@
 GameObject = Class{}
 
 function GameObject:init(def, x, y)
-    
+
     -- string identifying this object type
     self.type = def.type
 
@@ -29,8 +29,13 @@ function GameObject:init(def, x, y)
     self.width = def.width
     self.height = def.height
 
+    self.collidable = def.collidable
+    self.consumable = def.consumable
+
     -- default empty collision callback
     self.onCollide = function() end
+
+    self.onConsume = def.onConsume
 end
 
 function GameObject:update(dt)
