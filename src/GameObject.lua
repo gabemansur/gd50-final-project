@@ -32,10 +32,9 @@ function GameObject:init(def, x, y)
     self.collidable = def.collidable
     self.consumable = def.consumable
 
-    -- default empty collision callback
-    self.onCollide = function() end
+    self.onCollide = def.onCollide or function() end
 
-    self.onConsume = def.onConsume
+    self.onConsume = def.onConsume or function() end
 end
 
 function GameObject:update(dt)

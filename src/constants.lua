@@ -21,6 +21,8 @@ TILE_SIZE = 16
 --
 PLAYER_WALK_SPEED = 60
 
+PROJECTILE_SPEED = 80
+
 --
 -- map constants
 --

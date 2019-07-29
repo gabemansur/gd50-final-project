@@ -26,7 +26,37 @@ GAME_OBJECT_DEFS = {
     },
 
     ['pot'] = {
-        -- TODO
+      type = 'pot',
+      texture = 'tiles',
+      frame = 14,
+      width = 16,
+      height = 16,
+      solid = true,
+      collidable = true,
+      consumable = true,
+      defaultState = 'default',
+      states = {
+          ['default'] = {
+              frame = 14
+          },
+          ['broken'] = {
+            frame = 52
+          }
+
+      },
+
+      onConsume = function(player, object, objects)
+        -- If the player is already holding an object, put it down
+        if player.object then
+          local object = player.object
+          object.x = object.x - 4
+          player.object = nil
+          table.insert(objects, object)
+        end
+        gSounds['pickup']:play()
+        player.object = object
+        player:changeState('lifting')
+      end
     },
 
     ['heart'] ={
@@ -45,7 +75,7 @@ GAME_OBJECT_DEFS = {
           }
       },
       onConsume = function(player, object)
-          gSounds['hit-enemy']:play()
+          gSounds['life']:play()
           player.health = player.health + 2
           if player.health > 6 then
             player.health = 6

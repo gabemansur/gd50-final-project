@@ -38,6 +38,9 @@ function Entity:init(def)
     self.flashTimer = 0
 
     self.dead = false
+
+    -- an entitiy can hold one object at a time
+    self.object = nil
 end
 
 function Entity:createAnimations(animations)
@@ -90,6 +93,7 @@ function Entity:update(dt)
             self.invulnerableDuration = 0
             self.flashTimer = 0
         end
+
     end
 
     self.stateMachine:update(dt)
@@ -104,11 +108,16 @@ function Entity:processAI(params, dt)
 end
 
 function Entity:render(adjacentOffsetX, adjacentOffsetY)
-    
+
     -- draw sprite slightly transparent if invulnerable every 0.04 seconds
     if self.invulnerable and self.flashTimer > 0.06 then
         self.flashTimer = 0
         love.graphics.setColor(255, 255, 255, 64)
+    end
+
+    -- if the entity is holding an object, render it
+    if self.object then
+        self.object:render(adjacentOffsetX or 0, adjacentOffsetY or 0)
     end
 
     self.x, self.y = self.x + (adjacentOffsetX or 0), self.y + (adjacentOffsetY or 0)

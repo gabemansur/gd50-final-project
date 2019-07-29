@@ -80,13 +80,14 @@ end
     Randomly creates an assortment of obstacles for the player to navigate around.
 ]]
 function Room:generateObjects()
+
+    local switchX =  math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
+                  VIRTUAL_WIDTH - TILE_SIZE * 2 - 16)
+    local switchY = math.random(MAP_RENDER_OFFSET_Y + TILE_SIZE,
+                VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
+
     local switch = GameObject(
-        GAME_OBJECT_DEFS['switch'],
-        math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
-                    VIRTUAL_WIDTH - TILE_SIZE * 2 - 16),
-        math.random(MAP_RENDER_OFFSET_Y + TILE_SIZE,
-                    VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
-    )
+        GAME_OBJECT_DEFS['switch'], switchX, switchY)
 
     -- define a function for the switch that will open all doors in the room
     switch.onCollide = function()
@@ -104,6 +105,18 @@ function Room:generateObjects()
 
     -- add to list of objects in scene (only one switch for now)
     table.insert(self.objects, switch)
+
+    -- add a random (up to 4) number of pots to the room
+    for n = math.random(4), 4 do
+      local pot = GameObject(
+          GAME_OBJECT_DEFS['pot'],
+          math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
+                        VIRTUAL_WIDTH - TILE_SIZE * 2 - 16),
+          math.random(MAP_RENDER_OFFSET_Y + TILE_SIZE,
+                      VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
+          )
+      table.insert(self.objects, pot)
+    end
 end
 
 --[[
@@ -175,6 +188,18 @@ function Room:update(dt)
                 gStateMachine:change('game-over')
             end
         end
+
+        -- collisions between entity and any objects in the room
+        if not entity.dead then
+          for k, object in pairs(self.objects) do
+            if entity:collides(object) and object.type == 'projectile' then
+              entity:damage(1)
+              gSounds['hit-enemy']:play()
+              object:onCollide()
+              table.remove(self.objects, k)
+            end
+          end
+        end
     end
 
     for k, object in pairs(self.objects) do
@@ -187,7 +212,7 @@ function Room:update(dt)
             object:onCollide()
 
             if object.consumable then
-                object.onConsume(self.player, object)
+                object.onConsume(self.player, object, self.objects)
                 table.remove(self.objects, k)
             end
         end

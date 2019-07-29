@@ -69,7 +69,87 @@ ENTITY_DEFS = {
                 interval = 0.05,
                 looping = false,
                 texture = 'character-swing-sword'
-            }
+            },
+            ['lifting-left'] = {
+                frames = {7, 8, 9},
+                interval = 0.05,
+                looping = false,
+                texture = 'character-lifting'
+            },
+            ['lifting-right'] = {
+                frames = {4, 5, 6},
+                interval = 0.05,
+                looping = false,
+                texture = 'character-lifting'
+            },
+            ['lifting-down'] = {
+                frames = {1, 2, 3},
+                interval = 0.05,
+                looping = false,
+                texture = 'character-lifting'
+            },
+            ['lifting-up'] = {
+                frames = {10, 11, 12},
+                interval = 0.05,
+                looping = false,
+                texture = 'character-lifting'
+            },
+            ['holding-idle-left'] = {
+                frames = {13},
+                texture = 'character-pot-walk'
+            },
+            ['holding-idle-right'] = {
+                frames = {5},
+                texture = 'character-pot-walk'
+            },
+            ['holding-idle-down'] = {
+                frames = {1},
+                texture = 'character-pot-walk'
+            },
+            ['holding-idle-up'] = {
+                frames = {9},
+                texture = 'character-pot-walk'
+            },
+            ['holding-walk-left'] = {
+                frames = {13, 14, 15, 16},
+                interval = 0.155,
+                texture = 'character-holding-walk'
+            },
+            ['holding-walk-right'] = {
+                frames = {5, 6, 7, 8},
+                interval = 0.15,
+                texture = 'character-holding-walk'
+            },
+            ['holding-walk-down'] = {
+                frames = {1, 2, 3, 4},
+                interval = 0.15,
+                texture = 'character-holding-walk'
+            },
+            ['holding-walk-up'] = {
+                frames = {9, 10, 11, 12},
+                interval = 0.15,
+                texture = 'character-holding-walk'
+            },
+            ['throwing-left'] = {
+                frames = {9, 8, 7},
+                interval = 0.155,
+                texture = 'character-throwing'
+            },
+            ['throwing-right'] = {
+                frames = {6, 5, 4},
+                interval = 0.15,
+                texture = 'character-throwing'
+            },
+            ['throwing-down'] = {
+                frames = {3, 2, 1},
+                interval = 0.15,
+                texture = 'character-throwing'
+            },
+            ['throwing-up'] = {
+                frames = {12, 11, 10},
+                interval = 0.15,
+                texture = 'character-throwing'
+            },
         }
     },
     ['skeleton'] = {
