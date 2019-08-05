@@ -15,6 +15,9 @@ function Projectile:init(def, dungeon)
   self.width = def.width
   self.height = def.height
   self.direction = def.direction
+  self.speed = def.speed or PROJECTILE_SPEED
+  self.timer = def.timer or 0
+  self.onTimerExpire = def.onTimerExpire or function() end
 
   -- Set the original position, to reference in checking distance thrown
   self.originalX = def.x
@@ -31,12 +34,17 @@ function Projectile:init(def, dungeon)
   self.state = self.defaultState
   self.states = def.states
 
-  self.collidable = true
-  self.consumable = false
+  self.collidable = def.collidable
+  self.consumable = def.consumable
 
   self.onCollide = def.onCollide or function() end
   self.onConsume = def.onConsume or function() end
 
+  if self.timer then
+    Timer.after(self.timer, function()
+      self.onTimerExpire(self, self.dungeon.currentRoom.entities)
+    end)
+  end
 
 end
 
@@ -54,7 +62,7 @@ function Projectile:update(dt)
 
   if ((self.direction == 'up' or self.direction == 'down') and math.abs(self.y - self.originalY) > (4 * TILE_SIZE))
       or ((self.direction == 'left' or self.direction == 'right') and math.abs(self.x - self.originalX) > (4 * TILE_SIZE)) then
-      self.x = -999 -- Not sure how else to make it disappear from the room 
+      self.x = -999 -- Not sure how else to make it disappear from the room
   end
 
   if self:hitWall() then

@@ -59,6 +59,42 @@ GAME_OBJECT_DEFS = {
       end
     },
 
+    ['bomb'] = {
+      type = 'bomb',
+      texture = 'tiles',
+      frame = 16,
+      width = 16,
+      height = 16,
+      solid = true,
+      collidable = true,
+      consumable = true,
+      defaultState = 'default',
+      states = {
+          ['default'] = {
+              frame = 16
+          },
+          ['lit'] = {
+            frame = 35
+          },
+          ['exploding'] = {
+            frame = 54
+          },
+      },
+
+      onConsume = function(player, object, objects)
+        -- If the player is already holding an object, put it down
+        if player.object then
+          local object = player.object
+          object.x = object.x - 4
+          player.object = nil
+          table.insert(objects, object)
+        end
+        gSounds['pickup']:play()
+        player.object = object
+        player:changeState('lifting')
+      end
+    },
+
     ['heart'] ={
       type = 'heart',
       texture = 'hearts',

@@ -29,15 +29,39 @@ function PlayerThrowingState:enter(params)
     local object = self.player.object;
     self.player.object = nil
 
-    -- We can convert an object to a projectile, but we need to
-    -- change a few fields first
-    object.direction = self.player.direction -- Projectiles have direction
-    object.consumable = false
-    object.onConsume = false
-    object.collidable = true
+    if object.type == 'pot' then
+      -- We can convert an pot object to a projectile, but we need to
+      -- change a few fields first
+      object.direction = self.player.direction -- Projectiles have direction
+      object.consumable = false
+      object.onConsume = false
+      object.collidable = true
+      local projectile = Projectile(object, self.dungeon)
+      table.insert(self.dungeon.currentRoom.objects, projectile)
 
-    local projectile = Projectile(object, self.dungeon)
-    table.insert(self.dungeon.currentRoom.objects, projectile)
+    elseif object.type == 'bomb' then
+      object.speed = 0
+      object.timer = 5
+      object.onTimerExpire = (function(object, entities)
+        print(object.type .. ' goes boom!')
+        object.x = (object.x - 2) * TILE_SIZE
+        object.y = object.y - 2 * TILE_SIZE
+        object.height = object.height * 4
+        object.width = object.width * 4
+        for i, entity in pairs(entities) do
+          if entity:collides(object) then
+            entity:damage(1)
+            gSounds['hit-enemy']:play()
+          end
+        end
+        if self.player:collides(object) then
+          self.player:damage(1)
+          gSounds['hit-player']:play()
+        end
+      end)
+      local projectile = Projectile(object, self.dungeon)
+      table.insert(self.dungeon.currentRoom.objects, projectile)
+    end
 
 end
 
