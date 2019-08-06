@@ -71,13 +71,13 @@ function PlayerSwingSwordState:update(dt)
             local rand = math.random(20)
 
             if rand == 1 and entity.health <= 0 then
-              
+
               table.insert(self.dungeon.currentRoom.objects, GameObject(GAME_OBJECT_DEFS['heart'], entity.x, entity.y))
 
             -- Chance to spawn a bomb
             elseif rand == 2 and entity.health <= 0 then
 
-              table.insert(self.dungeon.currentRoom.objects, GameObject(GAME_OBJECT_DEFS['bomb'], entity.x, entity.y))
+              table.insert(self.dungeon.currentRoom.objects, Bomb(GAME_OBJECT_DEFS['bomb'], entity.x, entity.y))
             end
         end
     end

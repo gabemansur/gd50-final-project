@@ -68,8 +68,8 @@ function Room:generateEntities()
         })
 
         self.entities[i].stateMachine = StateMachine {
-            ['walk'] = function() return EntityWalkState(self.entities[i]) end,
-            ['idle'] = function() return EntityIdleState(self.entities[i]) end
+            ['walk'] = function() return EntityWalkState(self.entities[i], self) end,
+            ['idle'] = function() return EntityIdleState(self.entities[i], self) end
         }
 
         self.entities[i]:changeState('walk')
@@ -116,6 +116,18 @@ function Room:generateObjects()
                       VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
           )
       table.insert(self.objects, pot)
+    end
+
+    -- add a random (up to 8) number of blocks to the room
+    for j = math.random(8), 8 do
+      local block = GameObject(
+          GAME_OBJECT_DEFS['block'],
+          math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
+                        VIRTUAL_WIDTH - TILE_SIZE * 2 - 16),
+          math.random(MAP_RENDER_OFFSET_Y + TILE_SIZE,
+                      VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
+          )
+      table.insert(self.objects, block)
     end
 end
 
@@ -192,10 +204,15 @@ function Room:update(dt)
         -- collisions between entity and any objects in the room
         if not entity.dead then
           for k, object in pairs(self.objects) do
+
             if entity:collides(object) and object.type == 'projectile' then
               entity:damage(1)
               gSounds['hit-enemy']:play()
               object:onCollide()
+              table.remove(self.objects, k)
+            elseif object.type == 'bomb' and object.state == 'exploding' and entity:collides(object.hitBox) then
+              entity:damage(1)
+              gSounds['hit-enemy']:play()
               table.remove(self.objects, k)
             end
           end
@@ -214,6 +231,10 @@ function Room:update(dt)
             if object.consumable then
                 object.onConsume(self.player, object, self.objects)
                 table.remove(self.objects, k)
+            end
+
+            if object.type == 'bomb' and object.state == 'exploded' then
+              table.remove(self.objects, k)
             end
         end
     end

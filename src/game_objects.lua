@@ -25,6 +25,22 @@ GAME_OBJECT_DEFS = {
         }
     },
 
+    ['block'] = {
+        type = 'block',
+        texture = 'tiles',
+        frame = 120,
+        width = 16,
+        height = 16,
+        solid = true,
+        collidable = true,
+        defaultState = 'default',
+        states = {
+            ['default'] = {
+                frame = 120
+            }
+        }
+    },
+
     ['pot'] = {
       type = 'pot',
       texture = 'tiles',
@@ -68,9 +84,9 @@ GAME_OBJECT_DEFS = {
       solid = true,
       collidable = true,
       consumable = true,
-      defaultState = 'default',
+      defaultState = 'unlit',
       states = {
-          ['default'] = {
+          ['unlit'] = {
               frame = 16
           },
           ['lit'] = {
@@ -79,6 +95,9 @@ GAME_OBJECT_DEFS = {
           ['exploding'] = {
             frame = 54
           },
+          ['exploded'] = {
+            frame = 54
+          }
       },
 
       onConsume = function(player, object, objects)

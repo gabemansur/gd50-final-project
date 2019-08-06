@@ -8,11 +8,11 @@
 
 EntityWalkState = Class{__includes = BaseState}
 
-function EntityWalkState:init(entity, dungeon)
+function EntityWalkState:init(entity, room)
     self.entity = entity
     self.entity:changeAnimation('walk-down')
 
-    self.dungeon = dungeon
+    self.room = room
 
     -- used for AI control
     self.moveDuration = 0
@@ -60,6 +60,14 @@ function EntityWalkState:update(dt)
             self.bumped = true
         end
     end
+
+    for i, object in pairs(self.room.objects) do
+      if object.solid and self.entity:collides(object) then
+        self.bumped = true
+      end
+    end
+
+
 end
 
 function EntityWalkState:processAI(params, dt)
