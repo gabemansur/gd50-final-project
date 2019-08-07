@@ -8,9 +8,9 @@
 
 PlayerHoldingWalkState = Class{__includes = EntityWalkState}
 
-function PlayerHoldingWalkState:init(player, room)
+function PlayerHoldingWalkState:init(player, dungeon)
     self.entity = player
-    self.room = room
+    self.dungeon = dungeon
 
     -- render offset for spaced character sprite; negated in render function of state
     self.entity.offsetY = 5
@@ -34,7 +34,7 @@ function PlayerHoldingWalkState:update(dt)
         self.entity:changeState('holding-idle')
     end
 
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         self.entity:changeState('throwing')
     end
 
@@ -50,7 +50,7 @@ function PlayerHoldingWalkState:update(dt)
             self.entity.x = self.entity.x - PLAYER_WALK_SPEED * dt
 
             -- check for colliding into doorway to transition
-            for k, doorway in pairs(self.room.doorways) do
+            for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
                 if self.entity:collides(doorway) and doorway.open then
 
                     -- shift entity to center of door to avoid phasing through wall
@@ -67,7 +67,7 @@ function PlayerHoldingWalkState:update(dt)
             self.entity.x = self.entity.x + PLAYER_WALK_SPEED * dt
 
             -- check for colliding into doorway to transition
-            for k, doorway in pairs(self.room.doorways) do
+            for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
                 if self.entity:collides(doorway) and doorway.open then
 
                     -- shift entity to center of door to avoid phasing through wall
@@ -84,7 +84,7 @@ function PlayerHoldingWalkState:update(dt)
             self.entity.y = self.entity.y - PLAYER_WALK_SPEED * dt
 
             -- check for colliding into doorway to transition
-            for k, doorway in pairs(self.room.doorways) do
+            for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
                 if self.entity:collides(doorway) and doorway.open then
 
                     -- shift entity to center of door to avoid phasing through wall
@@ -101,7 +101,7 @@ function PlayerHoldingWalkState:update(dt)
             self.entity.y = self.entity.y + PLAYER_WALK_SPEED * dt
 
             -- check for colliding into doorway to transition
-            for k, doorway in pairs(self.room.doorways) do
+            for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
                 if self.entity:collides(doorway) and doorway.open then
 
                     -- shift entity to center of door to avoid phasing through wall

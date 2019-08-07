@@ -15,7 +15,7 @@ function Dungeon:init(player)
     self.rooms = {}
 
     -- current room we're operating in
-    self.currentRoom = Room(self.player)
+    self.currentRoom = Room(self.player, self)
 
     -- room we're moving camera to during a shift; becomes active room afterwards
     self.nextRoom = nil
@@ -51,7 +51,7 @@ function Dungeon:beginShifting(shiftX, shiftY)
 
     -- commence shifting and create a new room to transition to
     self.shifting = true
-    self.nextRoom = Room(self.player)
+    self.nextRoom = Room(self.player, self)
 
     -- start all doors in next room as open until we get in
     for k, doorway in pairs(self.nextRoom.doorways) do
@@ -127,30 +127,30 @@ function Dungeon:finishShifting()
 
     -- this room (previously the off-screen room) should now be in the center, not offset
     self.currentRoom.adjacentOffsetX = 0
-    self.currentRoom.adjacentOffsetY = 0 
+    self.currentRoom.adjacentOffsetY = 0
 end
 
 function Dungeon:update(dt)
-    
+
     -- pause updating if we're in the middle of shifting
-    if not self.shifting then    
+    if not self.shifting then
         self.currentRoom:update(dt)
     else
-        
+
         -- still update the player animation if we're shifting rooms
         self.player.currentAnimation:update(dt)
     end
 end
 
 function Dungeon:render()
-    
+
     -- translate the camera if we're actively shifting
     if self.shifting then
         love.graphics.translate(-math.floor(self.cameraX), -math.floor(self.cameraY))
     end
 
     self.currentRoom:render()
-    
+
     if self.nextRoom then
         self.nextRoom:render()
     end

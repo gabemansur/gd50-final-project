@@ -8,9 +8,11 @@
 
 Room = Class{}
 
-function Room:init(player)
+function Room:init(player, dungeon)
     self.width = MAP_WIDTH
     self.height = MAP_HEIGHT
+
+    self.dungeon = dungeon
 
     self.tiles = {}
     self:generateWallsAndFloors()
@@ -68,8 +70,8 @@ function Room:generateEntities()
         })
 
         self.entities[i].stateMachine = StateMachine {
-            ['walk'] = function() return EntityWalkState(self.entities[i], self) end,
-            ['idle'] = function() return EntityIdleState(self.entities[i], self) end
+            ['walk'] = function() return EntityWalkState(self.entities[i], self.dungeon) end,
+            ['idle'] = function() return EntityIdleState(self.entities[i], self.dungeon) end
         }
 
         self.entities[i]:changeState('walk')
@@ -205,7 +207,11 @@ function Room:update(dt)
         if not entity.dead then
           for k, object in pairs(self.objects) do
 
-            if entity:collides(object) and object.type == 'projectile' then
+            -- If entity walks into a block, move in a random direction
+            if entity:collides(object) and object.solid then
+              entity:changeDirection()
+
+            elseif entity:collides(object) and object.type == 'projectile' then
               entity:damage(1)
               gSounds['hit-enemy']:play()
               object:onCollide()
@@ -226,11 +232,20 @@ function Room:update(dt)
         -- trigger collision callback on object
         if self.player:collides(object) then
 
+
             object:onCollide()
 
             if object.consumable then
+              -- Pots or bombs can be picked up by pressing enter
+              if object.type == 'pot' or object.type == 'bomb' then
+                if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+                  object.onConsume(self.player, object, self.objects)
+                  table.remove(self.objects, k)
+                end
+              else
                 object.onConsume(self.player, object, self.objects)
                 table.remove(self.objects, k)
+              end
             end
 
             if object.type == 'bomb' and object.state == 'exploded' then

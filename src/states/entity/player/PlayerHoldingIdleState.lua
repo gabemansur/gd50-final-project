@@ -22,7 +22,7 @@ function PlayerHoldingIdleState:update(dt)
         self.entity:changeState('holding-walk')
     end
 
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         self.entity:changeState('throwing')
     end
 end

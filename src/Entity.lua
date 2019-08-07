@@ -65,6 +65,11 @@ function Entity:collides(target)
                 self.y + self.height < target.y or self.y > target.y + target.height)
 end
 
+function Entity:changeDirection()
+  local directions = {'left', 'right', 'up', 'down'}
+  self.direction = directions[math.random(#directions)]
+end
+
 function Entity:damage(dmg)
     self.health = self.health - dmg
 end
