@@ -136,5 +136,47 @@ GAME_OBJECT_DEFS = {
             player.health = 6
           end
       end
+    },
+
+    ['blue-gem'] ={
+      type = 'gem',
+      texture = 'items',
+      frame = 114,
+      width = 16,
+      height = 16,
+      solid = false,
+      collidable = true,
+      consumable = true,
+      defaultState = 'default',
+      states = {
+          ['default'] = {
+              frame = 114
+          }
+      },
+      onConsume = function(player, object)
+          gSounds['gem']:play()
+          player.gems = player.gems + 1
+      end
+    },
+
+    ['red-gem'] ={
+      type = 'items',
+      texture = 'items',
+      frame = 115,
+      width = 16,
+      height = 16,
+      solid = false,
+      collidable = false,
+      consumable = true,
+      defaultState = 'default',
+      states = {
+          ['default'] = {
+              frame = 115
+          }
+      },
+      onConsume = function(player, object)
+          gSounds['gem']:play()
+          player.gems = player.gems + 5
+      end
     }
 }

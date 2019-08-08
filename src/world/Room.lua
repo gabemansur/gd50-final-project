@@ -232,7 +232,6 @@ function Room:update(dt)
         -- trigger collision callback on object
         if self.player:collides(object) then
 
-
             object:onCollide()
 
             if object.consumable then

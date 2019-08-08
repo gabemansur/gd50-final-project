@@ -51,6 +51,7 @@ gTextures = {
     ['character-throwing'] = love.graphics.newImage('graphics/character_pot_lift.png'),
     ['hearts'] = love.graphics.newImage('graphics/hearts.png'),
     ['switches'] = love.graphics.newImage('graphics/switches.png'),
+    ['items'] = love.graphics.newImage('graphics/items.png'),
     ['entities'] = love.graphics.newImage('graphics/entities.png')
 }
 
@@ -63,6 +64,7 @@ gFrames = {
     ['character-throwing'] = GenerateQuads(gTextures['character-throwing'], 16, 32),
     ['entities'] = GenerateQuads(gTextures['entities'], 16, 16),
     ['hearts'] = GenerateQuads(gTextures['hearts'], 16, 16),
+    ['items'] = GenerateQuads(gTextures['items'], 16, 16),
     ['switches'] = GenerateQuads(gTextures['switches'], 16, 18)
 }
 
@@ -83,5 +85,7 @@ gSounds = {
     ['hit-player'] = love.audio.newSource('sounds/hit_player.wav'),
     ['door'] = love.audio.newSource('sounds/door.wav'),
     ['life'] = love.audio.newSource('sounds/life.wav'),
-    ['pickup'] = love.audio.newSource('sounds/pickup.wav')
+    ['pickup'] = love.audio.newSource('sounds/pickup.wav'),
+    ['gem'] = love.audio.newSource('sounds/gem.wav'),
+    ['explosion'] = love.audio.newSource('sounds/explosion.wav')
 }

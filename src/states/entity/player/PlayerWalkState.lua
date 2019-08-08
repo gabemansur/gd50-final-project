@@ -45,7 +45,7 @@ function PlayerWalkState:update(dt)
     if self.bumped then
 
         if self.entity.direction == 'left' then
-
+            
             -- temporarily adjust position into the wall, since bumping pushes outward
             self.entity.x = self.entity.x - PLAYER_WALK_SPEED * dt
 

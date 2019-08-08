@@ -52,6 +52,7 @@ function PlayerThrowingState:enter(params)
       elseif self.player.direction == 'down' then
         object.y = self.player.y + object.height + 10
       end
+      object:lightFuse() 
       table.insert(self.dungeon.currentRoom.objects, object)
     end
 

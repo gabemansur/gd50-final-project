@@ -73,4 +73,14 @@ function PlayState:render()
 
         healthLeft = healthLeft - 2
     end
+
+    -- Render gem count
+    love.graphics.draw(gTextures['items'], gFrames['items'][114],
+        58, 1)
+    love.graphics.setFont(gFonts['medium'])
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.printf(self.player.gems, 76, 1, 200, 'left')
+    --love.graphics.printf('Legend of', 0, VIRTUAL_HEIGHT / 2 - 32, VIRTUAL_WIDTH, 'center')
+
+
 end

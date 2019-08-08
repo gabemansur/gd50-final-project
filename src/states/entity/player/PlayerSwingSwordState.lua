@@ -68,16 +68,22 @@ function PlayerSwingSwordState:update(dt)
             gSounds['hit-enemy']:play()
 
             -- Chance to spawn a heart
-            local rand = math.random(20)
+            local n = math.random(100)
 
-            if rand == 1 and entity.health <= 0 then
+            if n == 1 and entity.health <= 0 then
 
               table.insert(self.dungeon.currentRoom.objects, GameObject(GAME_OBJECT_DEFS['heart'], entity.x, entity.y))
 
             -- Chance to spawn a bomb
-            elseif rand == 2 and entity.health <= 0 then
-
+          elseif n > 50 and entity.health <= 0 then
               table.insert(self.dungeon.currentRoom.objects, Bomb(GAME_OBJECT_DEFS['bomb'], entity.x, entity.y))
+
+            elseif n == 3 and entity.health <= 0 then
+              table.insert(self.dungeon.currentRoom.objects, GameObject(GAME_OBJECT_DEFS['red-gem'], entity.x, entity.y))
+
+            -- chance to spawn a gem
+            elseif n > 95 and entity.health <= 0 then
+              table.insert(self.dungeon.currentRoom.objects, GameObject(GAME_OBJECT_DEFS['blue-gem'], entity.x, entity.y))
             end
         end
     end

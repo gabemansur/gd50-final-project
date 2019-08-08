@@ -61,6 +61,31 @@ function EntityWalkState:update(dt)
         end
     end
 
+    -- Checking for collision with solid objects
+    for k, object in pairs(self.dungeon.currentRoom.objects) do
+      --[[ For debugging
+      if self.entity:collides(object) then
+        print('e.x: '..self.entity.x.. ' o.x: '..object.x)
+        print('e.y: '..self.entity.y.. ' o.y: '..object.y)
+      end
+      ]]
+      if self.entity:collides(object) and object.solid then
+        if self.entity.direction == 'left' and (math.abs(self.entity.y - object.y) < 16) then
+          self.entity.x = object.x + TILE_SIZE
+        end
+        if self.entity.direction == 'right' and (math.abs(self.entity.y - object.y) < 16) then
+          self.entity.x = object.x - TILE_SIZE
+        end
+        if self.entity.direction == 'up' and (math.abs(self.entity.x - object.x) < 15) then
+          self.entity.y = object.y + TILE_SIZE - self.entity.height / 2
+        end
+        if self.entity.direction == 'down' and (math.abs(self.entity.x - object.x) < 15) then
+          self.entity.y = object.y - self.entity.height
+        end
+        self.bumped = true
+      end
+    end
+
 end
 
 function EntityWalkState:processAI(params, dt)
