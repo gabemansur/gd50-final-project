@@ -48,39 +48,35 @@ end
 
 function Bomb:lightFuse()
   local hitboxX, hitboxY, hitboxWidth, hitboxHeight
-  hitboxWidth = TILE_SIZE * 2
-  hitboxHeight = TILE_SIZE * 2
-  hitboxX = self.x - TILE_SIZE
-  hitboxY = self.y - TILE_SIZE
+  hitboxWidth = (TILE_SIZE * 4) + self.width / 2
+  hitboxHeight = (TILE_SIZE * 4) + self.height / 2
+  hitboxX = self.x - 2 * TILE_SIZE
+  hitboxY = self.y - 2 * TILE_SIZE
 
   self.hitBox = Hitbox(hitboxX, hitboxY, hitboxWidth, hitboxHeight)
   self.state = 'lit'
 
   Timer.after(self.fuseTime, function()
-    local hitboxX, hitboxY, hitboxWidth, hitboxHeight
-    hitboxWidth = TILE_SIZE * 2
-    hitboxHeight = TILE_SIZE * 2
-    hitboxX = self.x - TILE_SIZE
-    hitboxY = self.y - TILE_SIZE
+
 
     self.clouds = {
       {
-        x = math.random(self.hitBox.x, self.hitBox.width),
-        y = math.random(self.hitBox.y, self.hitBox.height),
+        x = math.random(self.hitBox.x, self.hitBox.x + self.hitBox.width),
+        y = math.random(self.hitBox.y, self.hitBox.y + self.hitBox.height),
         width = 16,
         height = 16,
         opacity = 255
       },
       {
-        x = math.random(self.hitBox.x, self.hitBox.width),
-        y = math.random(self.hitBox.y, self.hitBox.height),
+        x = math.random(self.hitBox.x, self.hitBox.x + self.hitBox.width),
+        y = math.random(self.hitBox.y, self.hitBox.y + self.hitBox.height),
         width = 16,
         height = 16,
         opacity = 255
       },
       {
-        x = math.random(self.hitBox.x, self.hitBox.width),
-        y = math.random(self.hitBox.y, self.hitBox.height),
+        x = math.random(self.hitBox.x, self.hitBox.x + self.hitBox.width),
+        y = math.random(self.hitBox.y, self.hitBox.y + self.hitBox.height),
         width = 16,
         height = 16,
         opacity = 255
@@ -94,7 +90,8 @@ end
 
 function Bomb:explode()
   self.state = 'exploding'
-  Timer.after(.5, function()
+  gSounds['explosion']:play()
+  Timer.after(1, function()
     self.state = 'exploded'
   end)
 end
@@ -108,18 +105,12 @@ function Bomb:render(adjacentOffsetX, adjacentOffsetY)
   love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.states[self.state].frame or self.frame],
       self.x + adjacentOffsetX, self.y + adjacentOffsetY)
 
-  if self.hitBox then
-    love.graphics.setColor(255, 0, 255, 255)
-    love.graphics.rectangle('line', self.hitBox.x, self.hitBox.y, self.hitBox.width, self.hitBox.height)
-    love.graphics.setColor(255, 255, 255, 255)
-  end
-
   if self.state == 'exploding' then
     for i, cloud in pairs(self.clouds) do
       love.graphics.draw(gTextures['tiles'], gFrames['tiles'][247],
           cloud.x, cloud.y)
 
-      Timer.tween(.5, {
+      Timer.tween(2, {
           [cloud] = {opacity = 0}
       }):finish(function() table.remove(self.clouds, i) end)
     end
