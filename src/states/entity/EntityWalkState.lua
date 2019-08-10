@@ -63,18 +63,20 @@ function EntityWalkState:update(dt)
 
     -- Checking for collision with solid objects
     for k, object in pairs(self.dungeon.currentRoom.objects) do
-      --[[ For debugging
-      if self.entity:collides(object) then
-        print('e.x: '..self.entity.x.. ' o.x: '..object.x)
-        print('e.y: '..self.entity.y.. ' o.y: '..object.y)
-      end
-      ]]
+
       if self.entity:collides(object) and object.solid then
-        if self.entity.direction == 'left' and (math.abs(self.entity.y - object.y) < 16) then
-          self.entity.x = object.x + TILE_SIZE
+
+        if self.entity.direction == 'left'
+        and (self.entity.y + self.entity.height - 2) > object.y
+        or ((self.entity.y + 16) > (object.y + object.height))
+        then
+          self.entity.x = self.entity.x + PLAYER_WALK_SPEED * dt
         end
-        if self.entity.direction == 'right' and (math.abs(self.entity.y - object.y) < 16) then
-          self.entity.x = object.x - TILE_SIZE
+        if self.entity.direction == 'right'
+        and (self.entity.y + self.entity.height - 2) > object.y
+        or ((self.entity.y + 16) > (object.y + object.height))
+        then
+          self.entity.x = self.entity.x - PLAYER_WALK_SPEED * dt
         end
         if self.entity.direction == 'up' and (math.abs(self.entity.x - object.x) < 15) then
           self.entity.y = object.y + TILE_SIZE - self.entity.height / 2

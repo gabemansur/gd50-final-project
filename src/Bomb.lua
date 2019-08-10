@@ -7,13 +7,6 @@ function Bomb:init(def, x, y)
   self.width = def.width
   self.height = def.height
   self.direction = def.direction
-  --self.speed = def.speed or PROJECTILE_SPEED
-  --self.timer = def.timer or 0
-  --self.onTimerExpire = def.onTimerExpire or function() end
-
-  -- Set the original position, to reference in checking distance thrown
-  --self.originalX = def.x
-  --self.originalY = def.y
 
   self.dungeon = dungeon
 
@@ -33,16 +26,8 @@ function Bomb:init(def, x, y)
   self.onConsume = def.onConsume or function() end
 
   self.hitBox = nil
---[[
-  local hitboxX, hitboxY, hitboxWidth, hitboxHeight
-  hitboxWidth = TILE_SIZE * 2
-  hitboxHeight = TILE_SIZE * 2
-  hitboxX = self.x - TILE_SIZE
-  hitboxY = self.y - TILE_SIZE
 
-  self.hitBox = Hitbox(hitboxX, hitboxY, hitboxWidth, hitboxHeight)
-  ]]
-  self.fuseTime = 5
+  self.fuseTime = 3
   self.clouds = {}
 end
 

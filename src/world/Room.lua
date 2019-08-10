@@ -120,8 +120,8 @@ function Room:generateObjects()
       table.insert(self.objects, pot)
     end
 
-    -- add a random (up to 8) number of blocks to the room
-    for j = math.random(8), 8 do
+    -- add a random (up to 6) number of blocks to the room
+    for j = math.random(6), 6 do
       local block = GameObject(
           GAME_OBJECT_DEFS['block'],
           math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
